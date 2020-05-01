@@ -4,16 +4,14 @@ on:
   push:
     branches:
       - docker-proxy
-    tags: 
-      - v*
+  release:
+    types: [created, edited]
 jobs:
-  # Push image to GitHub Packages.
-  build_push:
+  build_publish:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout Repository
-        uses: actions/checkout@v2
-      - name: Publish Image
+      - uses: actions/checkout@v2
+      - name: Dockerfile Build & Publish
         uses: matootie/github-docker@v2.2.3
         with:
           accessToken: ${{ secrets.GITHUB_TOKEN }}
