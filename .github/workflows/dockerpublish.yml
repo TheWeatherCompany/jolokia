@@ -1,0 +1,20 @@
+name: Dockerfile Build & Publish
+
+on:
+  push:
+    branches:
+      - docker-proxy
+    tags: 
+      - v*
+jobs:
+  # Push image to GitHub Packages.
+  build_push:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v2
+      - name: Publish Image
+        uses: matootie/github-docker@v2.2.3
+        with:
+          accessToken: ${{ secrets.GITHUB_TOKEN }}
+          imageTagSuffix: '-patched'
