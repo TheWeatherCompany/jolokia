@@ -1,8 +1,6 @@
 name: Build & Publish
 
-on:
-  release:
-    types: [created, edited]
+on: release
 jobs:
   docker_publish:
     runs-on: ubuntu-latest
@@ -13,7 +11,7 @@ jobs:
           java-version: 1.8
       - run: mvn -B -DskipTests package --projects agent/war-unsecured --also-make
       
-      - run: cp agent/war-unsecured/target/jolokia-*.war jolokia.war
+      - run: cp -T agent/war-unsecured/target/jolokia-*.war jolokia.war
       - uses: JasonEtco/upload-to-release@master
         with:
           args: jolokia.war
