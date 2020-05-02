@@ -1,4 +1,4 @@
-name: Build & Publish
+name: Dockerfile Build & Publish
 
 on:
   push:
@@ -16,10 +16,3 @@ jobs:
         with:
           accessToken: ${{ secrets.GITHUB_TOKEN }}
           imageTagSuffix: '-patched'
-      
-      - run: cp agent/war-unsecured/target/jolokia-*.war jolokia.war
-      - uses: JasonEtco/upload-to-release@master
-        with:
-          args: jolokia.war
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
