@@ -11,9 +11,8 @@ jobs:
           java-version: 1.8
       - run: mvn -B -DskipTests package --projects agent/war-unsecured --also-make
       
-      - run: cp -T agent/war-unsecured/target/jolokia-*.war jolokia.war
       - uses: JasonEtco/upload-to-release@master
         with:
-          args: jolokia.war
+          args: agent/war-unsecured/target/jolokia-*.war
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
