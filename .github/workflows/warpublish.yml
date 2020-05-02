@@ -7,7 +7,7 @@ on:
   release:
     types: [created, edited]
 jobs:
-  build_publish:
+  docker_publish:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
@@ -17,9 +17,19 @@ jobs:
           accessToken: ${{ secrets.GITHUB_TOKEN }}
           imageTagSuffix: '-patched'
       
-      - run: cp agent/war-unsecured/target/jolokia-*.war jolokia.war
-      - uses: JasonEtco/upload-to-release@master
+      - uses: actions/setup-java@v1
         with:
-          args: jolokia.war
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          java-version: 1.8
+      - run: mvn -B -DskipTests package --projects agent/war-unsecured --also-make
+      
+      - uses: actions/upload-artifact@v2
+        with:
+          name: jolokia.war
+          path: agent/war-unsecured/target/jolokia-*.war
+      
+#       - run: cp agent/war-unsecured/target/jolokia-*.war jolokia.war
+#       - uses: JasonEtco/upload-to-release@master
+#         with:
+#           args: jolokia.war
+#         env:
+#           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
