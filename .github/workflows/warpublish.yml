@@ -1,9 +1,6 @@
 name: Build & Publish
 
 on:
-  push:
-    branches:
-      - docker-proxy
   release:
     types: [created, edited]
 jobs:
@@ -11,25 +8,14 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-      - name: Dockerfile Build & Publish
-        uses: matootie/github-docker@v2.2.3
-        with:
-          accessToken: ${{ secrets.GITHUB_TOKEN }}
-          imageTagSuffix: '-patched'
-      
       - uses: actions/setup-java@v1
         with:
           java-version: 1.8
       - run: mvn -B -DskipTests package --projects agent/war-unsecured --also-make
       
-      - uses: actions/upload-artifact@v2
+      - run: cp agent/war-unsecured/target/jolokia-*.war jolokia.war
+      - uses: JasonEtco/upload-to-release@master
         with:
-          name: jolokia.war
-          path: agent/war-unsecured/target/jolokia-*.war
-      
-#       - run: cp agent/war-unsecured/target/jolokia-*.war jolokia.war
-#       - uses: JasonEtco/upload-to-release@master
-#         with:
-#           args: jolokia.war
-#         env:
-#           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          args: jolokia.war
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
