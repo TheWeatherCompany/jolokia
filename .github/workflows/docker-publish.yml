@@ -1,0 +1,21 @@
+name: Docker
+
+on:
+  push:
+    # Publish `docker-proxy` as Docker `latest` image.
+    branches:
+      - docker-proxy
+
+jobs:
+
+  push:
+    runs-on: ubuntu-latest
+    if: github.event_name == 'push'
+
+    steps:
+      
+      - name: Publish Image
+        uses: matootie/github-docker@v3.1.0
+        with:
+          accessToken: ${{ github.token }}
+
